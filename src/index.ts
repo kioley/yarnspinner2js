@@ -1,10 +1,8 @@
-import { iHeader, iNode } from "./i"
+import { iHeader, iNode, iSettings } from "./i"
 import { parseBody } from "./parseBody"
 
-export function parseYarnSpinner(
-  yarnRaw: string,
-  settings?: { ignoreHeaderParameters: string[] }
-) {
+export function parseYarnSpinner(yarnRaw: string, settings?: iSettings) {
+  Object.assign(_settings, settings)
   const nodes: iNode[] = []
 
   const nodesRaw = yarnRaw.split(/===\r?\n/)
@@ -22,7 +20,7 @@ export function parseYarnSpinner(
     const header = parseNodeHeader(
       headerRaw,
       settings && {
-        ignoreParameters: settings.ignoreHeaderParameters,
+        ignoreParameters: _settings.ignoreHeaderParameters,
       }
     )
 
@@ -70,4 +68,9 @@ function parseNodeHeader(
   }
 
   return header
+}
+
+export const _settings = {
+  ignoreHeaderParameters: [],
+  separator: ": ",
 }

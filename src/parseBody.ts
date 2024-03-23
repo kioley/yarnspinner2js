@@ -1,7 +1,8 @@
 import { isComment, isEmpty, isOption } from "./utils"
-// import { extractLine } from "./strings"
-import { iIteratorWithStepBack, iLine, iSpeech, iVariable } from "./i"
+
+import { iIteratorWithStepBack, iLine } from "./i"
 import { createIteratorWithStepBack } from "./utils/iteratorWithStepBack"
+import { parseSpeech } from "./parseSpeech"
 
 export function parseBody(bodyRaw: string): iLine[] {
   const strings = createIteratorWithStepBack(bodyRaw.split("\n"))
@@ -34,6 +35,7 @@ export function parseStrings(
       console.log("option:", str)
     } else {
       console.log("speech:", str)
+      line = parseSpeech(str)
     }
 
     line && body.push(line)

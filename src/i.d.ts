@@ -1,3 +1,8 @@
+export interface iSettings {
+  separator?: string
+  ignoreHeaderParameters?: string[]
+}
+
 export interface iNode {
   header: iHeader
   body: iLine[]
