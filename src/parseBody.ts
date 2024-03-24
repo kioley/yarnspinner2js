@@ -11,6 +11,7 @@ import {
 import { iIteratorWithStepBack, iLine } from "./i"
 import { createIteratorWithStepBack } from "./utils/iteratorWithStepBack"
 import { parseSpeech } from "./parseSpeech"
+import { parseVariable } from "./parseVariable"
 
 export function parseBody(bodyRaw: string): iLine[] {
   const strings = createIteratorWithStepBack(bodyRaw.split("\n"))
@@ -35,6 +36,7 @@ export function parseStrings(
       console.log("if:", str)
     } else if (isVariable(str)) {
       console.log("set:", str)
+      line = parseVariable(str)
     } else if (isJump(str)) {
       console.log("jump:", str)
     } else if (isCommand(str)) {
