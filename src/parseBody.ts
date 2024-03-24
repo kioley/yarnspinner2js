@@ -1,4 +1,12 @@
-import { isComment, isEmpty, isOption } from "./utils"
+import {
+  isCommand,
+  isComment,
+  isConditions,
+  isEmpty,
+  isJump,
+  isOption,
+  isVariable,
+} from "./utils"
 
 import { iIteratorWithStepBack, iLine } from "./i"
 import { createIteratorWithStepBack } from "./utils/iteratorWithStepBack"
@@ -23,13 +31,13 @@ export function parseStrings(
 
     let line: iLine | undefined
 
-    if (/\s*<<if/.test(str)) {
+    if (isConditions(str)) {
       console.log("if:", str)
-    } else if (/\s*<<(declare|set)/.test(str)) {
+    } else if (isVariable(str)) {
       console.log("set:", str)
-    } else if (/\s*<<jump/.test(str)) {
+    } else if (isJump(str)) {
       console.log("jump:", str)
-    } else if (/\s*<</.test(str)) {
+    } else if (isCommand(str)) {
       console.log("command:", str)
     } else if (isOption(str)) {
       console.log("option:", str)

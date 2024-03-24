@@ -72,5 +72,5 @@ function parseNodeHeader(
 
 export const _settings = {
   ignoreHeaderParameters: [],
-  separator: ": ",
+  normalizeText: true,
 }

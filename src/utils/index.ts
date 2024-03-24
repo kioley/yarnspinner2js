@@ -13,3 +13,23 @@ export function isComment(str: string) {
 export function isOption(str: string) {
   return /\s*->/.test(str)
 }
+
+export function isConditions(str: string) {
+  return /\s*<<if/.test(str)
+}
+
+export function isVariable(str: string) {
+  return /\s*<<(declare|set)/.test(str)
+}
+
+export function isJump(str: string) {
+  return /\/\s*<<jump/.test(str)
+}
+
+export function isCommand(str: string) {
+  return /\s*<</.test(str)
+}
+
+export function normalizeString(str: string): string {
+  return str.trim().replace(/\s+/g, " ")
+}

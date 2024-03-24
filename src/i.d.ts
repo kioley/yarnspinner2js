@@ -1,6 +1,6 @@
 export interface iSettings {
-  separator?: string
   ignoreHeaderParameters?: string[]
+  normalizeText?: boolean
 }
 
 export interface iNode {
@@ -11,6 +11,8 @@ export interface iNode {
 export interface iHeader {
   [key: string]: string
 }
+
+export type iLine = iOptionsBlock | iSpeech | iConditionsBlock | iVariable
 
 export interface iSpeech {
   type: "speech"
@@ -28,8 +30,6 @@ export interface iOptionsBlock {
   type: "optionsBlock"
   options: iOption[]
 }
-
-export type iLine = iOptionsBlock | iSpeech | iConditionsBlock
 
 export interface iIteratorWithStepBack<T> extends IterableIterator<T> {
   stepBack(): void
