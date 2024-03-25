@@ -1,4 +1,5 @@
 import {
+  countIndents,
   isCommand,
   isComment,
   isConditions,

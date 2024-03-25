@@ -17,9 +17,25 @@ export function parseVariable(str: string): iVariable {
   }
 
   let separator = " = "
+  let operator = ""
 
   if (/<<set/.test(str) && /\sto\s/.test(str)) {
     separator = " to "
+  } else if (str.startsWith("<<set") && str.includes(" += ")) {
+    separator = " += "
+    operator = " + "
+  } else if (str.startsWith("<<set") && str.includes(" -= ")) {
+    separator = " -= "
+    operator = " - "
+  } else if (str.startsWith("<<set") && str.includes(" *= ")) {
+    separator = " *= "
+    operator = " * "
+  } else if (str.startsWith("<<set") && str.includes(" /= ")) {
+    separator = " /= "
+    operator = " / "
+  } else if (str.startsWith("<<set") && str.includes(" %= ")) {
+    separator = " %= "
+    operator = " % "
   } else if (!/\s=\s/.test(str)) {
     throw new SyntaxError("Missing assignment operator at" + str)
   }
@@ -27,6 +43,10 @@ export function parseVariable(str: string): iVariable {
   const splitIndex = str.indexOf(separator)
   let name = str.slice(prefixLength, splitIndex)
   let value = str.slice(splitIndex + separator.length, postfixPosition)
+
+  if (operator) {
+    value = name + operator + "(" + value + ")"
+  }
 
   if (_settings.normalizeText) {
     name = normalizeString(name)
