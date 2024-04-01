@@ -5,7 +5,7 @@ export function parseYarnSpinner(yarnRaw: string, settings?: Settings) {
   Object.assign(_settings, settings)
   const nodes: Node[] = []
 
-  const nodesRaw = yarnRaw.split(/===\r?\n/)
+  const nodesRaw = yarnRaw.split("\n===")
 
   for (const nodeRaw of nodesRaw) {
     if (!nodeRaw.trim()) continue
@@ -37,7 +37,7 @@ function splitNode(nodeRaw: string): [headerRaw: string, bodyRaw: string] {
     throw new SyntaxError("One of the nodes has no delimiter")
   }
 
-  const [headerRaw, bodyRaw, ...nodeParts] = nodeRaw.split(/---\r?\n/)
+  const [headerRaw, bodyRaw, ...nodeParts] = nodeRaw.split("\n---")
 
   if (nodeParts.length || !headerRaw.trim()) {
     throw new SyntaxError("One of the nodes has no header")

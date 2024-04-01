@@ -33,18 +33,18 @@ export function parseStrings(
     let line: Line | undefined
 
     if (isConditions(str)) {
-      console.log("if:", str)
+      // console.log("if:", str)
     } else if (isVariable(str)) {
-      console.log("set:", str)
+      // console.log("set:", str)
       line = parseVariable(str)
     } else if (isJump(str)) {
-      console.log("jump:", str)
+      // console.log("jump:", str)
     } else if (isCommand(str)) {
-      console.log("command:", str)
+      // console.log("command:", str)
     } else if (isOption(str)) {
-      console.log("option:", str)
+      // console.log("option:", str)
     } else {
-      console.log("speech:", str)
+      // console.log("speech:", str)
       line = parseSpeech(str)
     }
 
