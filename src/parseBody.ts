@@ -12,6 +12,7 @@ import { StringsIter, Line } from "./i"
 import { createStringsIter } from "./utils/createStringsIter"
 import { parseSpeech } from "./parseSpeech"
 import { parseVariable } from "./parseVariable"
+import { parseOptions } from "./parseOptions"
 
 export function parseBody(bodyRaw: string): Line[] {
   const nodeBody = createStringsIter(bodyRaw.split("\n"))
@@ -43,6 +44,8 @@ export function parseStrings(
       // console.log("command:", str)
     } else if (isOption(str)) {
       // console.log("option:", str)
+      strings.stepBack()
+      line = parseOptions(strings)
     } else {
       // console.log("speech:", str)
       line = parseSpeech(str)

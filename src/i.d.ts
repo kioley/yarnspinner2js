@@ -34,7 +34,6 @@ export interface OptionsBlock {
 export interface StringsIter extends IterableIterator<string> {
   stepBack(): void
   getLine(): string
-  getPreviousLine(): string
 }
 
 export interface ConditionItem {
