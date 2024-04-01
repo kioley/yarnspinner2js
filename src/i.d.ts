@@ -1,54 +1,56 @@
-export interface iSettings {
+export interface Settings {
   ignoreHeaderParameters?: string[]
   normalizeText?: boolean
 }
 
-export interface iNode {
-  header: iHeader
-  body: iLine[]
+export interface Node {
+  header: Header
+  body: Line[]
 }
 
-export interface iHeader {
+export interface Header {
   [key: string]: string
 }
 
-export type iLine = iOptionsBlock | iSpeech | iConditionsBlock | iVariable
+export type Line = OptionsBlock | Speech | ConditionsBlock | Variable
 
-export interface iSpeech {
+export interface Speech {
   type: "speech"
   name: string
   text: string
 }
 
-export interface iOption {
+export interface Option {
   type: "option"
   text: string
-  body: iLine[]
+  body: Line[]
 }
 
-export interface iOptionsBlock {
+export interface OptionsBlock {
   type: "optionsBlock"
-  options: iOption[]
+  options: Option[]
 }
 
-export interface iIteratorWithStepBack<T> extends IterableIterator<T> {
+export interface StringsIter extends IterableIterator<string> {
   stepBack(): void
+  getLine(): string
+  getPreviousLine(): string
 }
 
-export interface iConditionItem {
+export interface ConditionItem {
   condition: string
-  body: iLine[]
+  body: Line[]
 }
 
-export interface iConditionsBlock {
+export interface ConditionsBlock {
   type: "conditionsBlock"
   condition: string
-  body: iLine[]
-  elseifs: iConditionItem[]
-  else?: iLine[]
+  body: Line[]
+  elseifs: ConditionItem[]
+  else?: Line[]
 }
 
-export interface iVariable {
+export interface Variable {
   type: "declare" | "set"
   name: string
   value: string

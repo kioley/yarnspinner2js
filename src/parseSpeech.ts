@@ -1,8 +1,8 @@
 import { _settings } from "."
-import { iSpeech } from "./i"
+import { Speech } from "./i"
 import { normalizeString } from "./utils"
 
-export function parseSpeech(speech: string): iSpeech {
+export function parseSpeech(speech: string): Speech {
   const [name, text] = extractSpeech(speech)
   return {
     type: "speech",

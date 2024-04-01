@@ -1,15 +1,15 @@
 import { _settings } from "."
-import { iVariable } from "./i"
+import { Variable } from "./i"
 import { normalizeString } from "./utils"
 
 const declarePrefixLength = 10
 const setPrefixLength = 6
 const postfixPosition = -2
 
-export function parseVariable(str: string): iVariable {
+export function parseVariable(str: string): Variable {
   str = str.trim()
   let prefixLength = declarePrefixLength
-  let type: iVariable["type"] = "declare"
+  let type: Variable["type"] = "declare"
 
   if (str.startsWith("<<set")) {
     prefixLength = setPrefixLength

@@ -1,5 +1,4 @@
 import {
-  countIndents,
   isCommand,
   isComment,
   isConditions,
@@ -9,29 +8,29 @@ import {
   isVariable,
 } from "./utils"
 
-import { iIteratorWithStepBack, iLine } from "./i"
-import { createIteratorWithStepBack } from "./utils/iteratorWithStepBack"
+import { StringsIter, Line } from "./i"
+import { createStringsIter } from "./utils/createStringsIter"
 import { parseSpeech } from "./parseSpeech"
 import { parseVariable } from "./parseVariable"
 
-export function parseBody(bodyRaw: string): iLine[] {
-  const strings = createIteratorWithStepBack(bodyRaw.split("\n"))
+export function parseBody(bodyRaw: string): Line[] {
+  const nodeBody = createStringsIter(bodyRaw.split("\n"))
 
-  return parseStrings(strings)
+  return parseStrings(nodeBody)
 }
 
 export function parseStrings(
-  strings: iIteratorWithStepBack<string>,
+  strings: StringsIter,
   isOver?: (str: string) => boolean
-): iLine[] {
-  const body: iLine[] = []
+): Line[] {
+  const body: Line[] = []
 
   for (const str of strings) {
     if (isEmpty(str) || isComment(str)) continue
 
     if (isOver?.(str)) break
 
-    let line: iLine | undefined
+    let line: Line | undefined
 
     if (isConditions(str)) {
       console.log("if:", str)
