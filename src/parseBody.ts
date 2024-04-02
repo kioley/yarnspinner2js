@@ -1,7 +1,7 @@
 import {
   isCommand,
   isComment,
-  isConditions,
+  isIf,
   isEmpty,
   isJump,
   isOption,
@@ -12,7 +12,8 @@ import { StringsIter, Line } from "./i"
 import { createStringsIter } from "./utils/createStringsIter"
 import { parseSpeech } from "./parseSpeech"
 import { parseVariable } from "./parseVariable"
-import { parseOptions } from "./parseOptions"
+import { parseOptionsBlock } from "./parseOptionsBlock"
+import { parseIfBlock } from "./parseIfBlock"
 
 export function parseBody(bodyRaw: string): Line[] {
   const nodeBody = createStringsIter(bodyRaw.split("\n"))
@@ -33,8 +34,10 @@ export function parseStrings(
 
     let line: Line | undefined
 
-    if (isConditions(str)) {
+    if (isIf(str)) {
       // console.log("if:", str)
+      strings.stepBack()
+      line = parseIfBlock(strings)
     } else if (isVariable(str)) {
       // console.log("set:", str)
       line = parseVariable(str)
@@ -45,7 +48,7 @@ export function parseStrings(
     } else if (isOption(str)) {
       // console.log("option:", str)
       strings.stepBack()
-      line = parseOptions(strings)
+      line = parseOptionsBlock(strings)
     } else {
       // console.log("speech:", str)
       line = parseSpeech(str)

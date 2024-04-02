@@ -3,7 +3,7 @@ import { parseStrings } from "./parseBody"
 import { countIndents, isOption, normalizeString } from "./utils"
 import { _settings } from "."
 
-export function parseOptions(strings: StringsIter): OptionsBlock {
+export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
   const options: OptionsBlock = {
     type: "optionsBlock",
     options: [],

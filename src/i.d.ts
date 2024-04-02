@@ -12,7 +12,7 @@ export interface Header {
   [key: string]: string
 }
 
-export type Line = OptionsBlock | Speech | ConditionsBlock | Variable
+export type Line = OptionsBlock | Speech | ifBlock | Variable
 
 export interface Speech {
   type: "speech"
@@ -36,16 +36,17 @@ export interface StringsIter extends IterableIterator<string> {
   getLine(): string
 }
 
-export interface ConditionItem {
+export interface ifItem {
+  type: "elseif"
   condition: string
   body: Line[]
 }
 
-export interface ConditionsBlock {
-  type: "conditionsBlock"
+export interface ifBlock {
+  type: "ifBlock"
   condition: string
   body: Line[]
-  elseifs: ConditionItem[]
+  elseif: ifItem[]
   else?: Line[]
 }
 

@@ -14,7 +14,7 @@ export function isOption(str: string) {
   return /\s*->/.test(str)
 }
 
-export function isConditions(str: string) {
+export function isIf(str: string) {
   return /\s*<<if/.test(str)
 }
 
