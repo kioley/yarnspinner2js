@@ -14,6 +14,7 @@ import { parseSpeech } from "./parseSpeech"
 import { parseVariable } from "./parseVariable"
 import { parseOptionsBlock } from "./parseOptionsBlock"
 import { parseIfBlock } from "./parseIfBlock"
+import { parseJump } from "./parseJump"
 
 export function parseBody(bodyRaw: string): Line[] {
   const nodeBody = createStringsIter(bodyRaw.split("\n"))
@@ -43,6 +44,7 @@ export function parseStrings(
       line = parseVariable(str)
     } else if (isJump(str)) {
       // console.log("jump:", str)
+      line = parseJump(str)
     } else if (isCommand(str)) {
       // console.log("command:", str)
     } else if (isOption(str)) {

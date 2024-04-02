@@ -23,7 +23,7 @@ export function isVariable(str: string) {
 }
 
 export function isJump(str: string) {
-  return /\/\s*<<jump/.test(str)
+  return /\s*<<jump/.test(str)
 }
 
 export function isCommand(str: string) {

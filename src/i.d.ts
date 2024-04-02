@@ -12,7 +12,7 @@ export interface Header {
   [key: string]: string
 }
 
-export type Line = OptionsBlock | Speech | ifBlock | Variable
+export type Line = OptionsBlock | Speech | ifBlock | Variable | Jump
 
 export interface Speech {
   type: "speech"
@@ -54,4 +54,9 @@ export interface Variable {
   type: "declare" | "set"
   name: string
   value: string
+}
+
+export interface Jump {
+  type: "jump"
+  to: string
 }
