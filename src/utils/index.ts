@@ -7,7 +7,7 @@ export function isEmpty(str: string) {
 }
 
 export function isComment(str: string) {
-  return /^.*\/\//.test(str)
+  return /^\/\//.test(str)
 }
 
 export function isOption(str: string) {
