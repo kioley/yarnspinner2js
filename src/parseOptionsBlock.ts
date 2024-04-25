@@ -1,11 +1,11 @@
 import { StringsIter, Option, OptionsBlock } from "./i"
 import { parseStrings } from "./parseBody"
-import { countIndents, isOption, normalizeString } from "./utils"
-import { _settings } from "."
+import { countIndents, lineIsOption } from "./utils"
+import { extractID, normalizeString } from "./utils/strings"
 
 export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
   const options: OptionsBlock = {
-    type: "optionsBlock",
+    type: "options-block",
     options: [],
   }
 
@@ -13,7 +13,7 @@ export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
 
   for (const str of strings) {
     strings.stepBack()
-    if (!isOption(str) || countIndents(str) < indents) break
+    if (!lineIsOption(str) || countIndents(str) < indents) break
     const option = parseOption(strings)
     options.options.push(option)
   }
@@ -23,9 +23,11 @@ export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
 
 function parseOption(strings: StringsIter): Option {
   const str = strings.next().value
+  const [text, id] = extractOptionTextAndId(str)
   const option: Option = {
     type: "option",
-    text: extractOptionText(str),
+    text: normalizeString(text),
+    id,
     body: [],
   }
 
@@ -42,11 +44,8 @@ function parseOption(strings: StringsIter): Option {
   return option
 }
 
-export function extractOptionText(option: string): string {
+export function extractOptionTextAndId(option: string): [string, string] {
   const prefixLength = 2
-  let text = option.trimStart().substring(prefixLength)
-
-  if (_settings.normalizeText) text = normalizeString(text)
-
-  return text
+  const text = option.trimStart().substring(prefixLength)
+  return extractID(text)
 }

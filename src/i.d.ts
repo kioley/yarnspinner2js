@@ -1,6 +1,7 @@
 export interface Settings {
   ignoreHeaderParameters?: string[]
   normalizeText?: boolean
+  cutIdPrefixLine?: boolean
 }
 
 export interface Node {
@@ -12,28 +13,30 @@ export interface Header {
   [key: string]: string
 }
 
+export interface StringsIter extends IterableIterator<string> {
+  stepBack(): void
+  getLine(): string
+}
+
 export type Line = OptionsBlock | Speech | ifBlock | Variable | Jump | Command
 
 export interface Speech {
   type: "speech"
   name: string
   text: string
+  id: string
 }
 
 export interface Option {
   type: "option"
   text: string
   body: Line[]
+  id: string
 }
 
 export interface OptionsBlock {
-  type: "optionsBlock"
+  type: "options-block"
   options: Option[]
-}
-
-export interface StringsIter extends IterableIterator<string> {
-  stepBack(): void
-  getLine(): string
 }
 
 export interface ifItem {
@@ -43,7 +46,7 @@ export interface ifItem {
 }
 
 export interface ifBlock {
-  type: "ifBlock"
+  type: "if-block"
   condition: string
   body: Line[]
   elseif: ifItem[]

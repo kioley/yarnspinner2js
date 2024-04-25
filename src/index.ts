@@ -1,6 +1,12 @@
 import { Header, Node, Settings } from "./i"
 import { parseBody } from "./parseBody"
 
+export const _settings: Settings = {
+  ignoreHeaderParameters: [""],
+  normalizeText: true,
+  cutIdPrefixLine: true,
+}
+
 export function parseYarnSpinner(yarnRaw: string, settings?: Settings) {
   Object.assign(_settings, settings)
   const nodes: Node[] = []
@@ -54,15 +60,10 @@ function parseNodeHeader(headerRaw: string): Header {
   for (const string of headerStrings) {
     const [key, value] = string.split(/:(.*)/)
 
-    if (!key || _settings.ignoreHeaderParameters.includes(key)) continue
+    if (!key || _settings.ignoreHeaderParameters?.includes(key)) continue
 
     header[key.trim()] = value === undefined ? "" : value.trim()
   }
 
   return header
-}
-
-export const _settings = {
-  ignoreHeaderParameters: [""],
-  normalizeText: true,
 }

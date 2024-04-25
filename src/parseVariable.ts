@@ -1,6 +1,5 @@
-import { _settings } from "."
 import { Variable } from "./i"
-import { normalizeString } from "./utils"
+import { normalizeString } from "./utils/strings"
 
 const declarePrefixLength = 10
 const setPrefixLength = 6
@@ -48,10 +47,8 @@ export function parseVariable(str: string): Variable {
     value = name + operator + "(" + value + ")"
   }
 
-  if (_settings.normalizeText) {
-    name = normalizeString(name)
-    value = value.trim()
-  }
+  name = normalizeString(name)
+  value = normalizeString(value)
 
   return {
     type,

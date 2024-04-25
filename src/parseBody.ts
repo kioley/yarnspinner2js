@@ -1,11 +1,11 @@
 import {
-  isCommand,
-  isComment,
-  isIf,
-  isEmpty,
-  isJump,
-  isOption,
-  isVariable,
+  lineIsCommand,
+  lineIsComment,
+  lineIsIfBlockStart,
+  lineIsEmpty,
+  lineIsJump,
+  lineIsOption,
+  lineIsVariable,
 } from "./utils"
 
 import { StringsIter, Line } from "./i"
@@ -16,6 +16,7 @@ import { parseOptionsBlock } from "./parseOptionsBlock"
 import { parseIfBlock } from "./parseIfBlock"
 import { parseJump } from "./parseJump"
 import { parseCommand } from "./parseCommand"
+import { clearComment } from "./utils/strings"
 
 export function parseBody(bodyRaw: string): Line[] {
   const nodeBody = createStringsIter(bodyRaw.split("\n"))
@@ -29,27 +30,31 @@ export function parseStrings(
 ): Line[] {
   const body: Line[] = []
 
-  for (const str of strings) {
-    if (isEmpty(str) || isComment(str)) continue
+  for (let str of strings) {
+    if (lineIsEmpty(str) || lineIsComment(str)) continue
 
     if (isOver?.(str)) break
 
+    str = clearComment(str)
+
+    // console.log(str)
+
     let line: Line | undefined
 
-    if (isIf(str)) {
+    if (lineIsIfBlockStart(str)) {
       // console.log("if:", str)
       strings.stepBack()
       line = parseIfBlock(strings)
-    } else if (isVariable(str)) {
+    } else if (lineIsVariable(str)) {
       // console.log("set:", str)
       line = parseVariable(str)
-    } else if (isJump(str)) {
+    } else if (lineIsJump(str)) {
       // console.log("jump:", str)
       line = parseJump(str)
-    } else if (isCommand(str)) {
+    } else if (lineIsCommand(str)) {
       // console.log("command:", str)
       line = parseCommand(str)
-    } else if (isOption(str)) {
+    } else if (lineIsOption(str)) {
       // console.log("option:", str)
       strings.stepBack()
       line = parseOptionsBlock(strings)

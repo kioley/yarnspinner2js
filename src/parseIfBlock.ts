@@ -1,7 +1,6 @@
-import { _settings } from "."
 import { ifItem, ifBlock, StringsIter } from "./i"
 import { parseStrings } from "./parseBody"
-import { normalizeString } from "./utils"
+import { normalizeString } from "./utils/strings"
 
 const ifPrefixLength = 4
 const elseifPrefixLength = 8
@@ -9,7 +8,7 @@ const postfixLength = -2
 
 export function parseIfBlock(strings: StringsIter): ifBlock {
   const ifBlock: ifBlock = {
-    type: "ifBlock",
+    type: "if-block",
     condition: "",
     body: [],
     elseif: [],
@@ -27,9 +26,7 @@ export function parseIfBlock(strings: StringsIter): ifBlock {
     if (str.includes("<<endif>>")) break
 
     if (str.includes("<<else>>")) {
-      ifBlock.else = parseStrings(strings, (_str) =>
-        isIfBlockOver(_str, strings)
-      )
+      ifBlock.else = parseStrings(strings, (_str) => ifBlockOver(_str, strings))
     } else if (str.includes("<<elseif")) {
       const conditionItem = parseIfItem(str, strings)
       ifBlock.elseif.push(conditionItem)
@@ -54,20 +51,18 @@ function parseIfItem(
     body: [],
   }
 
-  let condition = str
+  const condition = str
     .trim()
     .slice(isMainIf ? ifPrefixLength : elseifPrefixLength, postfixLength)
 
-  if (_settings.normalizeText) condition = normalizeString(condition)
+  item.condition = normalizeString(condition)
 
-  item.condition = condition
-
-  item.body = parseStrings(strings, (_str) => isIfBlockOver(_str, strings))
+  item.body = parseStrings(strings, (_str) => ifBlockOver(_str, strings))
 
   return item
 }
 
-function isIfBlockOver(str: string, strings: StringsIter): boolean {
+function ifBlockOver(str: string, strings: StringsIter): boolean {
   if (
     str.includes("<<else>>") ||
     str.includes("<<elseif") ||
