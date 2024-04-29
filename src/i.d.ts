@@ -4,11 +4,12 @@ export interface Settings {
 }
 
 export interface Node {
-  header: Header
+  title: string
+  parameters: NodeParameters
   body: Line[]
 }
 
-export interface Header {
+export interface NodeParameters {
   [key: string]: string
 }
 

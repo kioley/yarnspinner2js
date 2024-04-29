@@ -1,4 +1,4 @@
-import { Header, Node, Settings } from "./i"
+import { NodeParameters, Node, Settings } from "./i"
 import { parseBody } from "./parseBody"
 
 export const _settings: Settings = {
@@ -16,19 +16,17 @@ export function parseYarnSpinner(yarnRaw: string, settings?: Settings) {
     if (!nodeRaw.trim()) continue
 
     const node: Node = {
-      header: {},
+      title: "",
+      parameters: {},
       body: [],
     }
 
     const [headerRaw, bodyRaw] = splitNode(nodeRaw)
 
-    const header = parseNodeHeader(headerRaw)
+    ;[node.title, node.parameters] = parseNodeHeader(headerRaw)
 
-    if (!header.title) {
-      throw new SyntaxError("One of the nodes has no title")
-    }
-
-    node.header = header
+    // node.title = title
+    // node.parameters = params
 
     node.body = parseBody(bodyRaw)
     nodes.push(node)
@@ -51,18 +49,30 @@ function splitNode(nodeRaw: string): [headerRaw: string, bodyRaw: string] {
   return [headerRaw, bodyRaw]
 }
 
-function parseNodeHeader(headerRaw: string): Header {
-  const header: Header = {}
+function parseNodeHeader(headerRaw: string): [string, NodeParameters] {
+  const params: NodeParameters = {}
+  let title = ""
 
   const headerStrings = headerRaw.split("\n").map((s) => s.trim())
 
   for (const string of headerStrings) {
-    const [key, value] = string.split(/:(.*)/)
+    // const [key, value] = string.split(/:(.*)/)
+    const [key, value] = string.split(":").map((i) => i.trim())
+    // key = key.trim()
+    // value = value.trim()
+    if (key === "title") {
+      title = value
+      continue
+    }
 
     if (!key || _settings.ignoreHeaderParameters?.includes(key)) continue
 
-    header[key.trim()] = value === undefined ? "" : value.trim()
+    // params[key] = value === undefined ? "" : value
+    key && (params[key] = value)
   }
 
-  return header
+  if (!title) {
+    throw new SyntaxError("One of the nodes has no title")
+  }
+  return [title, params]
 }
