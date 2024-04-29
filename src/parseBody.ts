@@ -37,29 +37,21 @@ export function parseStrings(
 
     str = clearComment(str)
 
-    // console.log(str)
-
     let line: Line | undefined
 
     if (lineIsIfBlockStart(str)) {
-      // console.log("if:", str)
       strings.stepBack()
       line = parseIfBlock(strings)
     } else if (lineIsVariable(str)) {
-      // console.log("set:", str)
       line = parseVariable(str)
     } else if (lineIsJump(str)) {
-      // console.log("jump:", str)
       line = parseJump(str)
     } else if (lineIsCommand(str)) {
-      // console.log("command:", str)
       line = parseCommand(str)
     } else if (lineIsOption(str)) {
-      // console.log("option:", str)
       strings.stepBack()
       line = parseOptionsBlock(strings)
     } else {
-      // console.log("speech:", str)
       line = parseSpeech(str)
     }
 

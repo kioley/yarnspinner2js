@@ -1,7 +1,7 @@
 import { StringsIter, Option, OptionsBlock } from "./i"
 import { parseStrings } from "./parseBody"
 import { countIndents, lineIsOption } from "./utils"
-import { extractID, normalizeString } from "./utils/strings"
+import { extractCondition, extractID, normalizeString } from "./utils/strings"
 
 export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
   const options: OptionsBlock = {
@@ -23,11 +23,13 @@ export function parseOptionsBlock(strings: StringsIter): OptionsBlock {
 
 function parseOption(strings: StringsIter): Option {
   const str = strings.next().value
-  const [text, id] = extractOptionTextAndId(str)
+  const [_text, id] = extractOptionTextAndId(str)
+  const [text, condition] = extractCondition(_text)
   const option: Option = {
     type: "option",
     text: normalizeString(text),
     id,
+    condition,
     body: [],
   }
 

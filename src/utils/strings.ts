@@ -1,34 +1,54 @@
 import { _settings } from ".."
 
+const escapingChars = {
+  "\\": "L34KLFdfg3",
+  "#": "jt5437teWY",
+  "/": "kdf8438hjf",
+  "[": "asLS8345KL",
+  "]": "fsdkgDf768",
+  ">": "dK48fkK20G",
+  "<": "F7gi8f3Jk0",
+}
+
 export function normalizeString(str: string): string {
   return _settings.normalizeText ? str.trim().replace(/\s+/g, " ") : str
 }
 
-export function splitWithEscaping(
-  str: string,
-  splitter: string
-): [string, string] {
-  const placeholder = "sad98KLFKsdfsadf0409t5igsdfg"
-  const escaped = splitter
-    .split("")
-    .map((s) => "\\\\" + s)
-    .join("")
-
-  str = str.replace(new RegExp(escaped, "g"), placeholder)
-  const strings = str.split(splitter)
-  strings[0] = strings[0].replace(new RegExp(placeholder, "g"), splitter)
-
-  return strings.length < 2 ? [strings[0], ""] : [strings[0], strings[1]]
-}
-
 export function extractID(str: string): [string, string] {
   let id: string
-  ;[str, id] = splitWithEscaping(str, "#")
-  id =
-    id.startsWith("line:") && _settings.cutIdPrefixLine ? id.split(":")[1] : id
-  return [str, normalizeString(id)]
+  ;[str, id] = str.split("#")
+
+  return [str, id ? normalizeString(id) : ""]
 }
 
 export function clearComment(str: string): string {
-  return splitWithEscaping(str, "//")[0]
+  return str.split("//")[0]
+}
+
+export function extractCondition(str: string): [string, string] {
+  const reg = str.match(/(<<if(.+)>>)\s*$/)
+
+  if (!reg?.length) {
+    return [str, ""]
+  }
+
+  str = str.replace(reg?.[1], "")
+
+  const condition = normalizeString(reg?.[2])
+
+  return [str, condition]
+}
+
+export function hideEscapingChars(str: string) {
+  for (const i in escapingChars) {
+    str = str.split("\\" + i).join(escapingChars[i])
+  }
+  return str
+}
+
+export function showEscapingChars(str: string) {
+  for (const i in escapingChars) {
+    str = str.split(escapingChars[i]).join(i)
+  }
+  return str
 }

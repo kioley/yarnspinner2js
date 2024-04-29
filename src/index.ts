@@ -4,7 +4,6 @@ import { parseBody } from "./parseBody"
 export const _settings: Settings = {
   ignoreHeaderParameters: [""],
   normalizeText: true,
-  cutIdPrefixLine: true,
 }
 
 export function parseYarnSpinner(yarnRaw: string, settings?: Settings) {

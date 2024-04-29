@@ -3,7 +3,6 @@ export function countIndents(str: string) {
 }
 
 export function lineIsEmpty(str: string) {
-  // return !/\S/.test(str)
   return !str.trim()
 }
 

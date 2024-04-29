@@ -1,7 +1,6 @@
 export interface Settings {
   ignoreHeaderParameters?: string[]
   normalizeText?: boolean
-  cutIdPrefixLine?: boolean
 }
 
 export interface Node {
@@ -24,6 +23,7 @@ export interface Speech {
   type: "speech"
   name: string
   text: string
+  condition: string
   id: string
 }
 
@@ -31,6 +31,7 @@ export interface Option {
   type: "option"
   text: string
   body: Line[]
+  condition: string
   id: string
 }
 

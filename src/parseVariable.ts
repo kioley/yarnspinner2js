@@ -40,14 +40,13 @@ export function parseVariable(str: string): Variable {
   }
 
   const splitIndex = str.indexOf(separator)
-  let name = str.slice(prefixLength, splitIndex)
+  const name = str.slice(prefixLength, splitIndex)
   let value = str.slice(splitIndex + separator.length, postfixPosition)
 
   if (operator) {
     value = name + operator + "(" + value + ")"
   }
 
-  name = normalizeString(name)
   value = normalizeString(value)
 
   return {
