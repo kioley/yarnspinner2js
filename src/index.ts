@@ -25,9 +25,6 @@ export function parseYarnSpinner(yarnRaw: string, settings?: Settings) {
 
     ;[node.title, node.parameters] = parseNodeHeader(headerRaw)
 
-    // node.title = title
-    // node.parameters = params
-
     node.body = parseBody(bodyRaw)
     nodes.push(node)
   }
@@ -56,10 +53,8 @@ function parseNodeHeader(headerRaw: string): [string, NodeParameters] {
   const headerStrings = headerRaw.split("\n").map((s) => s.trim())
 
   for (const string of headerStrings) {
-    // const [key, value] = string.split(/:(.*)/)
     const [key, value] = string.split(":").map((i) => i.trim())
-    // key = key.trim()
-    // value = value.trim()
+
     if (key === "title") {
       title = value
       continue
@@ -67,7 +62,6 @@ function parseNodeHeader(headerRaw: string): [string, NodeParameters] {
 
     if (!key || _settings.ignoreHeaderParameters?.includes(key)) continue
 
-    // params[key] = value === undefined ? "" : value
     key && (params[key] = value)
   }
 

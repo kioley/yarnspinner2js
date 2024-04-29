@@ -41,18 +41,15 @@ export interface OptionsBlock {
   options: Option[]
 }
 
-export interface ifItem {
-  type: "elseif"
+export interface ifBlockItem {
+  type: "if-block-item"
   condition: string
   body: Line[]
 }
 
 export interface ifBlock {
   type: "if-block"
-  condition: string
-  body: Line[]
-  elseif: ifItem[]
-  else?: Line[]
+  items: ifBlockItem[]
 }
 
 export interface Variable {
@@ -69,5 +66,5 @@ export interface Jump {
 export interface Command {
   type: "command"
   name: string
-  params: string[]
+  parameters: string[]
 }

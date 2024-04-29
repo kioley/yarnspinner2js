@@ -1,65 +1,44 @@
-import { ifItem, ifBlock, StringsIter } from "./i"
+import { ifBlockItem, ifBlock, StringsIter } from "./i"
 import { parseStrings } from "./parseBody"
 import { normalizeString } from "./utils/strings"
-
-const ifPrefixLength = 4
-const elseifPrefixLength = 8
-const postfixLength = -2
 
 export function parseIfBlock(strings: StringsIter): ifBlock {
   const ifBlock: ifBlock = {
     type: "if-block",
-    condition: "",
-    body: [],
-    elseif: [],
+    items: [],
   }
-
-  const str = strings.getLine()
-  strings.next()
-  ;({ condition: ifBlock.condition, body: ifBlock.body } = parseIfItem(
-    str,
-    strings,
-    true
-  ))
 
   for (const str of strings) {
     if (str.includes("<<endif>>")) break
 
-    if (str.includes("<<else>>")) {
-      ifBlock.else = parseStrings(strings, (_str) => ifBlockOver(_str, strings))
-    } else if (str.includes("<<elseif")) {
-      const conditionItem = parseIfItem(str, strings)
-      ifBlock.elseif.push(conditionItem)
-    } else {
+    const item: ifBlockItem = {
+      type: "if-block-item",
+      condition: "",
+      body: [],
+    }
+
+    if (str.includes("<<if") || str.includes("<<elseif")) {
+      item.condition = parseCondition(str)
+    } else if (!str.includes("<<else>>")) {
       throw new SyntaxError(
-        `The condition block must contain only lines <<elseif>>, <<else>>, <<endif>> and nested lines. String: "${str}"`
+        `The condition block must contain only lines <<elseif>>, <<else>>, <<endif>> and nested lines. Line: "${str}"`
       )
     }
+    item.body = parseStrings(strings, (_str) => ifBlockOver(_str, strings))
+    ifBlock.items.push(item)
   }
 
   return ifBlock
 }
 
-function parseIfItem(
-  str: string,
-  strings: StringsIter,
-  isMainIf: boolean = false
-): ifItem {
-  const item: ifItem = {
-    type: "elseif",
-    condition: "",
-    body: [],
+function parseCondition(str: string): string {
+  const condition = str.match(/<<(if|elseif)(.*)>>/)?.[2] || ""
+
+  if (!condition.trim()) {
+    throw new SyntaxError(`Condition not found. Line: "${str}"`)
   }
 
-  const condition = str
-    .trim()
-    .slice(isMainIf ? ifPrefixLength : elseifPrefixLength, postfixLength)
-
-  item.condition = normalizeString(condition)
-
-  item.body = parseStrings(strings, (_str) => ifBlockOver(_str, strings))
-
-  return item
+  return normalizeString(condition)
 }
 
 function ifBlockOver(str: string, strings: StringsIter): boolean {

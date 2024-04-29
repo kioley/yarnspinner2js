@@ -6,7 +6,7 @@ export function parseCommand(str: string): Command {
   return {
     type: "command",
     name,
-    params: str
+    parameters: str
       .slice(name.length + 2, -2)
       .trim()
       .split(/\s+/),
